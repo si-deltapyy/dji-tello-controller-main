@@ -1,0 +1,58 @@
+<ion-content class="ion-padding">
+  <div class="controller-container">
+    <div class="top-right">
+      <ion-button color="warning" shape="round" (click)="sendCommand('command')">
+        <ion-icon name="wifi" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="top-left">
+      <ion-button color="success" shape="round" (click)="takeOff()">
+        <ion-icon name="airplane" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button color="danger" shape="round" (click)="land()">
+        <ion-icon name="power" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="top-info">
+      <div class="battery-status">
+        <ion-label>Status Baterai: {{ battery !== null ? battery + '%' : 'Memuat...' }}</ion-label>
+      </div>
+      <div class="connection-status" [ngClass]="{'connected': connection === 'Connected', 'disconnected': connection === 'Disconnected'}">
+        <ion-label>Status Koneksi: {{ connection }}</ion-label>
+      </div>
+    </div>
+
+    <div class="joystick-group">
+      <div class="joystick-container">
+        <div class="joystick-label top-label">Maju</div>
+        <div id="movement-joystick" class="joystick"></div>
+        <div class="joystick-label bottom-label">Mundur</div>
+        <div class="joystick-label left-label">Kiri</div>
+        <div class="joystick-label right-label">Kanan</div>
+      </div>
+
+      <div class="joystick-container">
+        <div class="joystick-label top-label">Naik</div>
+        <div id="directional-joystick" class="joystick"></div>
+        <div class="joystick-label bottom-label">Turun</div>
+      </div>
+    </div>
+    
+    <script src="../../assets/js/Broadway/Player/Decoder.js"></script>
+    <script src="../../assets/js/Broadway/Player/Decoder.js"></script>
+
+    <!-- Tombol Kamera -->
+    <div class="camera-toggle">
+      <ion-button fill="clear" size="small" (click)="toggleCamera()">
+        <ion-icon [name]="cameraOn ? 'eye-off' : 'eye'" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="video-container" [class.video-off]="!cameraOn">
+      <!-- <video id="drone-video" autoplay *ngIf="cameraOn"></video> -->
+      <canvas id="drone-video" *ngIf="cameraOn"></canvas>
+    </div>
+  </div>
+</ion-content>
