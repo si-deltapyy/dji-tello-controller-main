@@ -28,7 +28,7 @@ export class HomePage implements AfterViewInit, OnInit {
   ngOnInit() {
     this.updateBatteryStatus();
     this.updateConnectionStatus();
-    this.startCamera();
+    // this.startCamera();
     this.toggleCamera();
 
     setInterval(() => {
@@ -170,12 +170,16 @@ export class HomePage implements AfterViewInit, OnInit {
     await this.sendCommand('land');
   }
 
-  toggleCamera() {
+  async cam() {
+    await this.sendCommand('streamon');
+  }
+
+  async toggleCamera() {
     this.cameraOn = !this.cameraOn;
     if (this.cameraOn) {
-      this.telloService.startVideoStream();
+      await this.sendCommand('streamon');
     } else {
-      this.telloService.stopVideoStream();
+      await this.sendCommand('streamon');
     }
   }
 }
