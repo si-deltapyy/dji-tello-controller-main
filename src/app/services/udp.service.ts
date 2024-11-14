@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 
 declare var chrome: any;
-declare var Player: any;  // Broadway.js Player
-
+declare var Player: any;  // Broadway.js Playe
 @Injectable({
   providedIn: 'root',
 })
@@ -14,6 +13,7 @@ export class TelloService {
   private videoSocketId: number | null = null;
   private player: any;
   private batteryStatusCallback: (status: number) => void = () => {};
+  private accelerationCallback: (accel: {x: number, y: number, z: number}) => void = () => {};
   private lastResponseTime: number = 0;
   battery: number = 0;
 
@@ -61,8 +61,11 @@ export class TelloService {
             console.error('Gagal bind video socket:', chrome.runtime.lastError);
           } else {
             console.log('Socket video berhasil di-bind ke port:', this.videoPort);
-            this.initializePlayer();
-            this.startReceivingVideo();
+            // Tunda inisialisasi player hingga video socket siap
+            setTimeout(() => {
+              this.initializePlayer();
+              this.startReceivingVideo();
+            }, 1000);
           }
         });
       });
@@ -73,15 +76,14 @@ export class TelloService {
   initializePlayer() {
     const canvas = document.getElementById('drone-video') as HTMLCanvasElement;
     if (canvas) {
-      // Atur ukuran canvas
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
 
       this.player = new Player({
         useWorker: true,
         workerFile: '../../assets/js/Broadway/Player/Decoder.js',
-        webgl: false,
-        wasm: '../../assets/js/Broadway/Decoder/js/avc.wasm', // Tambahkan ini untuk menggunakan Wasm
+        webgl: "auto",
+        // wasm: '../../assets/js/Broadway/Decoder/js/avc.wasm',
         size: { width: canvas.width, height: canvas.height },
       });
 
@@ -102,7 +104,7 @@ export class TelloService {
 
             if (this.player) {
               console.log('Mengirim data ke player');
-              this.player.decode(dataArray); // Dekode data video menggunakan Broadway.js player
+              this.player.decode(dataArray);
             } else {
               console.error('Player tidak diinisialisasi.');
             }
@@ -116,23 +118,24 @@ export class TelloService {
     }
   }
 
-  // Mulai menerima data dari drone
   startReceiving() {
     if (this.socketId !== null) {
       chrome.sockets.udp.onReceive.addListener((info: any) => {
         if (info.socketId === this.socketId) {
           try {
             const dataArray = new Uint8Array(info.data);
-            console.log('Data Array:', dataArray);
-
             const message = new TextDecoder().decode(dataArray);
             console.log('Pesan diterima:', message);
-
-            if (typeof message === 'string') {
+  
+            // Cek apakah responsnya adalah akselerasi
+            if (message.startsWith('acceleration')) {
+              const accelerationData = message.trim();
+              console.log('Data akselerasi:', accelerationData);
+            } else if (typeof message === 'string') {
+              // Penanganan respons lain, seperti status baterai
               const batteryLevel = parseInt(message.trim(), 10);
               if (!isNaN(batteryLevel)) {
                 this.battery = batteryLevel;
-                console.log('Tingkat baterai:', this.battery);
                 if (this.batteryStatusCallback) {
                   this.batteryStatusCallback(this.battery);
                 }
@@ -168,6 +171,10 @@ export class TelloService {
     this.sendCommand('battery?');
   }
 
+  getAcceleration() {
+    this.sendCommand('acceleration?'); // Mengirim perintah untuk mendapatkan data akselerasi
+  } 
+
   // Memeriksa status koneksi drone
   checkConnectionStatus(): boolean {
     const currentTime = Date.now();
@@ -194,5 +201,9 @@ export class TelloService {
         this.player.setSize(canvas.width, canvas.height);
       }
     }
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', this.updateCanvasSize.bind(this));
   }
 }

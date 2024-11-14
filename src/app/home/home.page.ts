@@ -32,6 +32,7 @@ export class HomePage implements AfterViewInit, OnInit {
     setInterval(() => {
       this.updateBatteryStatus();
       this.updateConnectionStatus();
+      this.telloService.getAcceleration();
     }, 3000);
   }
 
@@ -151,13 +152,12 @@ export class HomePage implements AfterViewInit, OnInit {
     await this.sendCommand('land');
   }
 
-  toggleCamera() {
-    this.cameraOn = !this.cameraOn;
-    if (this.cameraOn) {
-      this.telloService.startVideoStream();
-      this.telloService.startReceivingVideo();
-    } else {
-      this.telloService.stopVideoStream();
-    }
-  }
+  // toggleCamera() {
+  //   this.cameraOn = !this.cameraOn;
+  //   if (this.cameraOn) {
+  //     this.telloService.startVideoStream();
+  //   } else {
+  //     this.telloService.stopVideoStream();
+  //   }
+  // }
 }
