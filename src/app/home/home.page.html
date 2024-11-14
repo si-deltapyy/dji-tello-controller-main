@@ -15,6 +15,7 @@
       </ion-button>
     </div>
 
+    <video id="video" width="20%" style="position: absolute; top: 10%;" autoplay></video>
     <div class="top-info">
       <div class="battery-status">
         <ion-label>Status Baterai: {{ battery !== null ? battery + '%' : 'Memuat...' }}</ion-label>
@@ -23,9 +24,6 @@
         <ion-label>Status Koneksi: {{ connection }}</ion-label>
       </div>
     </div>
-
-    <h2>Camera Stream</h2>
-    <video id="video" width="100%" autoplay></video>
 
 
     <div class="joystick-group">
@@ -50,14 +48,14 @@
     <script src="../../assets/js/Broadway/Player/Player.js"></script>
 
     <!-- Tombol Kamera -->
-    <!-- <div class="camera-toggle">
+    <div class="camera-toggle">
       <ion-button fill="clear" size="small" (click)="toggleCamera()">
         <ion-icon [name]="cameraOn ? 'eye-off' : 'eye'" slot="icon-only"></ion-icon>
       </ion-button>
-    </div> -->
+    </div>
 
-    <!-- <div class="video-container" [class.video-off]="!cameraOn">
+    <div class="video-container" [class.video-off]="!cameraOn">
       <canvas id="drone-video" *ngIf="cameraOn"></canvas>
-    </div> -->
+    </div>
   </div>
 </ion-content>

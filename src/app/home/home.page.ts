@@ -29,6 +29,7 @@ export class HomePage implements AfterViewInit, OnInit {
     this.updateBatteryStatus();
     this.updateConnectionStatus();
     this.startCamera();
+    this.toggleCamera();
 
     setInterval(() => {
       this.updateBatteryStatus();
