@@ -28,12 +28,30 @@ export class HomePage implements AfterViewInit, OnInit {
   ngOnInit() {
     this.updateBatteryStatus();
     this.updateConnectionStatus();
-    
+    this.startCamera();
+    this.toggleCamera();
+
     setInterval(() => {
       this.updateBatteryStatus();
       this.updateConnectionStatus();
       this.telloService.getAcceleration();
     }, 3000);
+  }
+
+  startCamera() {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then((stream) => {
+          const videoElement: any = document.getElementById('video');
+          videoElement.srcObject = stream;
+        })
+        .catch((error) => {
+          console.error('Error accessing the camera: ', error);
+          alert('Unable to access the camera.');
+        });
+    } else {
+      alert('Your browser does not support camera access.');
+    }
   }
 
   updateBatteryStatus() {
@@ -152,12 +170,12 @@ export class HomePage implements AfterViewInit, OnInit {
     await this.sendCommand('land');
   }
 
-  // toggleCamera() {
-  //   this.cameraOn = !this.cameraOn;
-  //   if (this.cameraOn) {
-  //     this.telloService.startVideoStream();
-  //   } else {
-  //     this.telloService.stopVideoStream();
-  //   }
-  // }
+  toggleCamera() {
+    this.cameraOn = !this.cameraOn;
+    if (this.cameraOn) {
+      this.telloService.startVideoStream();
+    } else {
+      this.telloService.stopVideoStream();
+    }
+  }
 }
