@@ -61,10 +61,9 @@ export class TelloService {
             console.error('Gagal bind video socket:', chrome.runtime.lastError);
           } else {
             console.log('Socket video berhasil di-bind ke port:', this.videoPort);
-            // Tunda inisialisasi player hingga video socket siap
             setTimeout(() => {
-              this.initializePlayer();
-              this.startReceivingVideo();
+              this.initializePlayer(); // Menginisialisasi player setelah socket terhubung
+              this.startReceivingVideo(); // Mulai menerima video
             }, 1000);
           }
         });
@@ -72,7 +71,8 @@ export class TelloService {
     }
   }
 
-  // Menginisialisasi Broadway.js player
+
+  // Menginisialisasi player (Broadway.js)
   initializePlayer() {
     const canvas = document.getElementById('drone-video') as HTMLCanvasElement;
     if (canvas) {
@@ -82,16 +82,17 @@ export class TelloService {
       this.player = new Player({
         useWorker: true,
         workerFile: '../../assets/js/Broadway/Player/Decoder.js',
-        webgl: "auto",
-        // wasm: '../../assets/js/Broadway/Decoder/js/avc.wasm',
+        webgl: 'auto',
         size: { width: canvas.width, height: canvas.height },
       });
 
+      // Ganti canvas HTML dengan player canvas
       canvas.parentNode?.replaceChild(this.player.canvas, canvas);
     } else {
       console.error('Canvas video tidak ditemukan.');
     }
   }
+
 
   // Mulai menerima video stream
   startReceivingVideo() {
@@ -104,7 +105,7 @@ export class TelloService {
 
             if (this.player) {
               console.log('Mengirim data ke player');
-              this.player.decode(dataArray);
+              this.player.decode(dataArray); // Mengirim data video ke player
             } else {
               console.error('Player tidak diinisialisasi.');
             }
@@ -114,6 +115,7 @@ export class TelloService {
         }
       });
 
+      // Pastikan streaming video diaktifkan dengan mengirimkan perintah 'streamon'
       this.sendCommand('streamon');
     }
   }
@@ -126,7 +128,7 @@ export class TelloService {
             const dataArray = new Uint8Array(info.data);
             const message = new TextDecoder().decode(dataArray);
             console.log('Pesan diterima:', message);
-  
+
             // Cek apakah responsnya adalah akselerasi
             if (message.startsWith('acceleration')) {
               const accelerationData = message.trim();
@@ -151,7 +153,7 @@ export class TelloService {
       });
     }
   }
-  
+
   sendCommand(command: string) {
     if (this.socketId !== null) {
       const data = new TextEncoder().encode(command);
@@ -173,7 +175,7 @@ export class TelloService {
 
   getAcceleration() {
     this.sendCommand('acceleration?'); // Mengirim perintah untuk mendapatkan data akselerasi
-  } 
+  }
 
   // Memeriksa status koneksi drone
   checkConnectionStatus(): boolean {

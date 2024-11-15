@@ -182,4 +182,14 @@ export class HomePage implements AfterViewInit, OnInit {
       await this.sendCommand('streamoff');
     }
   }
+
+  startVideoStream(){
+    this.sendCommand('streamon');
+  }
+
+  stopVideoStream(){
+    this.sendCommand('streamoff');
+  }
+
+
 }
