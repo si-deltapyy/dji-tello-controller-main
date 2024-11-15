@@ -1,5 +1,5 @@
 {
-  "name": "your-project-name",
+  "name": "Dji ATAMAGRI",
   "version": "1.0.0",
   "description": "Deskripsi proyek Anda",
   "main": "server.js",
@@ -26,12 +26,14 @@
     "@ionic/angular": "^8.0.0",
     "@ionic/cordova-builders": "^11.0.0",
     "@tensorflow/tfjs": "^4.22.0",
+    "concurrently": "^8.0.0",
     "express": "^4.21.1",
     "hls.js": "^1.5.14",
     "ionicons": "^7.0.0",
     "jsmpeg": "^1.0.0",
+    "nipplejs": "^0.10.2",
     "nodemon": "^2.0.15",
-    "concurrently": "^8.0.0"
+    "python-shell": "^5.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.0.0",
@@ -44,6 +46,13 @@
     "@angular/compiler-cli": "^18.0.0",
     "@angular/language-service": "^18.0.0",
     "@ionic/angular-toolkit": "^11.0.1",
+    "cordova-plugin-advanced-http": "^3.3.1",
+    "cordova-plugin-file": "^8.1.2",
     "typescript": "~5.4.0"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-ffmpeg": {}
+    }
   }
 }
