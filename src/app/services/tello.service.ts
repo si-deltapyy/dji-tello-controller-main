@@ -5,12 +5,14 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class TelloService {
-  private apiUrl = 'http://localhost:5000/run-python';  // URL API Python
+export class TelloServic {
+
+  private apiUrl = 'http://localhost:3000/run-python';  // URL API backend Node.js
 
   constructor(private http: HttpClient) {}
 
+  // Fungsi untuk memanggil API yang menjalankan skrip Python
   runPythonScript(): Observable<any> {
-    return this.http.post<any>(this.apiUrl, {});  // Kirim POST request ke API
+    return this.http.get(this.apiUrl);
   }
 }

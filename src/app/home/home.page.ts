@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, OnInit, NgZone } from '@angular/core';
 import { TelloService } from '../services/udp.service';
+import { TelloServic } from '../services/tello.service';
 import * as nipplejs from 'nipplejs';
 
 @Component({
@@ -18,7 +19,7 @@ export class HomePage implements AfterViewInit, OnInit {
 
   cameraOn = true;
 
-  constructor(private telloService: TelloService, private zone: NgZone) {}
+  constructor(private telloService: TelloService, private zone: NgZone, private tello: TelloServic) {}
 
   ngAfterViewInit() {
     this.initJoysticks();
@@ -36,6 +37,17 @@ export class HomePage implements AfterViewInit, OnInit {
       this.updateConnectionStatus();
       this.telloService.getAcceleration();
     }, 3000);
+  }
+
+  runPythonScript() {
+    this.tello.runPythonScript().subscribe(
+      (response) => {
+        console.log('Python script executed successfully:', response);
+      },
+      (error) => {
+        console.error('Error executing Python script:', error);
+      }
+    );
   }
 
   startCamera() {
