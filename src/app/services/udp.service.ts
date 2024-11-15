@@ -61,9 +61,10 @@ export class TelloService {
             console.error('Gagal bind video socket:', chrome.runtime.lastError);
           } else {
             console.log('Socket video berhasil di-bind ke port:', this.videoPort);
+            // Tunda inisialisasi player hingga video socket siap
             setTimeout(() => {
-              this.initializePlayer(); // Menginisialisasi player setelah socket terhubung
-              this.startReceivingVideo(); // Mulai menerima video
+              this.initializePlayer();
+              this.startReceivingVideo();
             }, 1000);
           }
         });
@@ -71,8 +72,7 @@ export class TelloService {
     }
   }
 
-
-  // Menginisialisasi player (Broadway.js)
+  // Menginisialisasi Broadway.js player
   initializePlayer() {
     const canvas = document.getElementById('drone-video') as HTMLCanvasElement;
     if (canvas) {
@@ -82,17 +82,16 @@ export class TelloService {
       this.player = new Player({
         useWorker: true,
         workerFile: '../../assets/js/Broadway/Player/Decoder.js',
-        webgl: 'auto',
+        webgl: "auto",
+        // wasm: '../../assets/js/Broadway/Decoder/js/avc.wasm',
         size: { width: canvas.width, height: canvas.height },
       });
 
-      // Ganti canvas HTML dengan player canvas
       canvas.parentNode?.replaceChild(this.player.canvas, canvas);
     } else {
       console.error('Canvas video tidak ditemukan.');
     }
   }
-
 
   // Mulai menerima video stream
   startReceivingVideo() {
@@ -105,7 +104,7 @@ export class TelloService {
 
             if (this.player) {
               console.log('Mengirim data ke player');
-              this.player.decode(dataArray); // Mengirim data video ke player
+              this.player.decode(dataArray);
             } else {
               console.error('Player tidak diinisialisasi.');
             }
@@ -115,7 +114,6 @@ export class TelloService {
         }
       });
 
-      // Pastikan streaming video diaktifkan dengan mengirimkan perintah 'streamon'
       this.sendCommand('streamon');
     }
   }
