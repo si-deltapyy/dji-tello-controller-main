@@ -25,7 +25,9 @@
     "@cycjimmy/jsmpeg-player": "^6.1.1",
     "@ionic/angular": "^8.0.0",
     "@ionic/cordova-builders": "^11.0.0",
+    "@tensorflow-models/coco-ssd": "^2.2.3",
     "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs-layers": "^4.22.0",
     "concurrently": "^8.0.0",
     "express": "^4.21.1",
     "hls.js": "^1.5.14",
@@ -33,7 +35,8 @@
     "jsmpeg": "^1.0.0",
     "nipplejs": "^0.10.2",
     "nodemon": "^2.0.15",
-    "python-shell": "^5.0.0"
+    "python-shell": "^5.0.0",
+    "zone.js": "^0.15.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.0.0",
@@ -47,12 +50,22 @@
     "@angular/language-service": "^18.0.0",
     "@ionic/angular-toolkit": "^11.0.1",
     "cordova-plugin-advanced-http": "^3.3.1",
+    "cordova-plugin-device": "2.0.2",
     "cordova-plugin-file": "^8.1.2",
+    "cordova-plugin-ionic-webview": "^5.0.0",
+    "cordova-plugin-screen-orientation": "^3.0.2",
+    "cordova-plugin-splashscreen": "5.0.2",
+    "cordova-plugin-statusbar": "2.4.2",
     "typescript": "~5.4.0"
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-ffmpeg": {}
+      "cordova-plugin-ffmpeg": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-ionic-webview": {},
+      "cordova-plugin-screen-orientation": {}
     }
   }
 }
